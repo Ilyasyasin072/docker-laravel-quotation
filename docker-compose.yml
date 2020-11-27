@@ -1,0 +1,55 @@
+version: "3.7"
+services:
+  app:
+    build:
+      args:
+        user: admin
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    image: quotation
+    container_name: quotation-app
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - db
+      - nginx
+    networks:
+      - quotation
+      
+  db:
+    image: mysql:5.7
+    container_name: quotation-db
+    restart: unless-stopped
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_DATABASE: quotation_db
+      MYSQL_PASSWORD: strongrootpassword
+      MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: strongrootpassword
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - ./docker-compose/mysql:/docker-entrypoint-initdb.d
+    networks:
+      - quotation
+    ports:
+      - "3306:3306"
+
+  nginx:
+    image: nginx:alpine
+    container_name: quotation-nginx
+    restart: unless-stopped
+    ports:
+      - 8003:80
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d/
+    networks:
+      - quotation
+
+networks:
+  quotation:
+    driver: bridge

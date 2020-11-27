@@ -1,0 +1,8 @@
+Requirment plugin support need
+1. boostrap
+2. jquery
+3. datatable
+4. tabledit
+5. phpoffice/phpexcel
+6. maatwebsite/excel
+7. barryvdh/laravel-dompdf

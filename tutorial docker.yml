@@ -1,0 +1,89 @@
+1. composer create-project --prefer-dist laravel/laravel:^7.0 quotation
+2. create DockerFile
+    - touch DockerFile
+    - nano DockerFile
+3. create docker folder
+   - mkdir docker-composer
+    - INSTALL NGINX
+        - mkdir -p docker-compose/nginx
+            - touch file_name.conf
+            - nano docker-copmose/nginx/file_name.conf 
+    - INSTALL MYSQL
+        - mkdir -p docker/compose/MYSQL
+        - touch file_name.sql
+4. Multi Container
+    - touch docker-compose.yml
+    - nano docker-compose/yml
+        - isi docker compose yml
+            version: "3.7"
+            service: 
+                app:(menentukan xontext dan DockerFile intrksi)
+                    build: (konfigurasi memberitahu docker compose membangun lokal)
+                        args:
+                            user: admin (argumen)
+                            uid: 1000 (penyesuaikan peritah pengguna)
+                        context: ./
+                        dockerfile: DockerFile
+                    image: app_name (nama yang digunakan)
+                    container_name: app-name (penyiapkan nama container)
+                    restart: unless-stopped (selalu memulai ulang)
+                    working_dir: /var/www/ (menetapkan direktori asal)
+                    volumes: (voulme singkron kontent)
+                        - ./:/var/www
+                    depends_on: 
+                        - db
+                        - nginx
+                    netrowks:
+                        - network_name
+                db:
+                    image: mysql:5.7
+                    container_name: quotation-db
+                    restart: unless-stopped
+                    command: --default-authentication-plugin=mysql_native_password
+                    environment:
+                    MYSQL_DATABASE: quotation_db
+                    MYSQL_PASSWORD: strongrootpassword
+                    MYSQL_USER: root
+                    MYSQL_ROOT_PASSWORD: strongrootpassword
+                    SERVICE_TAGS: dev
+                    SERVICE_NAME: mysql
+                    volumes:
+                    - ./docker-compose/mysql:/docker-entrypoint-initdb.d
+                    networks:
+                    - quotation
+                    ports:
+                    - "3306:3306"
+                
+                nginx:
+                    image: nginx:alpine
+                    container_name: quotation-nginx
+                    restart: unless-stopped
+                    ports:
+                    - 8003:80
+                    volumes:
+                    - ./:/var/www
+                    - ./docker-compose/nginx:/etc/nginx/conf.d/
+                    networks:
+                    - quotation
+            netrowks: 
+                network_name:
+                    driver: bridge
+5. docker-compose build app
+6. docker-compose up -dan
+7. docker-compose ps
+8. docker-compose exec app ls -al
+9. docker-compose exec name_build composer install
+10, cp .env.example .env
+11. docker-compose exec name_build php artisan key:generate
+12. configuration .env
+    -DB_CONNECTION=mysql
+    -DB_HOST=db
+    -DB_PORT=3306
+    -DB_DATABASE=quotation_db
+    -DB_USERNAME=root
+    -DB_PASSWORD=strongrootpassword
+13. docker-compose exec -it container_name_db bash
+    -mysql -u root -p
+14. docker-compose exec -it container_app bash
+    - php artisan migrate OR 
+    docker-compose exec container_app php artisan migrate
