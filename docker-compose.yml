@@ -16,6 +16,7 @@ services:
     depends_on:
       - db
       - nginx
+      - phpmyadmin
     networks:
       - quotation
       
@@ -47,6 +48,19 @@ services:
     volumes:
       - ./:/var/www
       - ./docker-compose/nginx:/etc/nginx/conf.d/
+    networks:
+      - quotation
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:5.0.1
+    container_name: quotation-phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: strongrootpassword
+    ports:
+      - "8080:80"
     networks:
       - quotation
 
