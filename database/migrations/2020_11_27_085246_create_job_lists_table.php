@@ -14,7 +14,11 @@ class CreateJobListsTable extends Migration
     public function up()
     {
         Schema::create('job_lists', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id')->unsigned();
+            $table->string('job_name');
+            $table->integer('job_cost');
+            $table->integer('job_type_id');
+            $table->integer('job_lost');
             $table->timestamps();
         });
     }

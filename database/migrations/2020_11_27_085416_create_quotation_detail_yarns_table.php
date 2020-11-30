@@ -14,7 +14,13 @@ class CreateQuotationDetailYarnsTable extends Migration
     public function up()
     {
         Schema::create('quotation_detail_yarns', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id')->unsigned();
+            $table->integer('quotation_id');
+            $table->integer('yarn_list_id');
+            $table->integer('usage_percentage');
+            $table->integer('price');
+            $table->string('desc');
+            $table->integer('sequence');
             $table->timestamps();
         });
     }

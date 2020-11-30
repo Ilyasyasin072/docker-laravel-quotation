@@ -14,7 +14,12 @@ class CreateQuotationDetailJobsTable extends Migration
     public function up()
     {
         Schema::create('quotation_detail_jobs', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id')->unsigned();
+            $table->integer('quotation_id');
+            $table->integer('job_list_id');
+            $table->integer('job_cost');
+            $table->integer('job_lost');
+            $table->integer('sequence');
             $table->timestamps();
         });
     }

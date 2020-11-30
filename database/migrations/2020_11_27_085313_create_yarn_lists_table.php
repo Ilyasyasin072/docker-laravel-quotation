@@ -14,7 +14,16 @@ class CreateYarnListsTable extends Migration
     public function up()
     {
         Schema::create('yarn_lists', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id')->unsigned();
+            $table->string('yarn_aliases');
+            $table->integer('ne_count');
+            $table->integer('denier_count');
+            $table->integer('filament_count');
+            $table->string('yarn_name');
+            $table->integer('price');
+            $table->integer('supplier_id');
+            $table->string('another');
+            $table->string('desc');
             $table->timestamps();
         });
     }

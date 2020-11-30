@@ -14,7 +14,10 @@ class CreatePurchaseInquiriesTable extends Migration
     public function up()
     {
         Schema::create('purchase_inquiries', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id')->unsigned();
+            $table->integer('customer_id');
+            $table->string('PO');
+            $table->string('term');
             $table->timestamps();
         });
     }
